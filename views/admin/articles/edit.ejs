@@ -1,0 +1,57 @@
+<%- include('../../partials/header.ejs') %>
+<%- include('../../partials/navibar.ejs') %>
+
+<div class="container">
+    <hr>
+    <div class="card">
+            <div class="card-header">
+                <h2> Editar Artigos: </h2>
+             </div>
+          <div class="card-body">   
+            <form method="POST" action="/articles/update"> 
+               <input class="form-control" type="text" name="title" placeholder="Defina o título do artigo" value="<%= article.title %>">
+               <input type="hidden" name="id" value="<%= article.id%>"></input>
+               <textarea id="article" class="form-control" placeholder="Escreva aqui seu artigo" name="body"></textarea><br>
+               <br> <label>Categoria</label>
+               <select name="category" class="form-control">
+                <% categories.forEach((category) =>{ %>
+                    <% if(category.id == article.categoryId){%>
+                        <option selected value="<%= category.id%>"> <%= category.title  %> </option>
+
+                        <% }else{ %>
+                            <option value="<%= category.id%>"> <%= category.title  %> </option>
+                     <% } %>
+
+                      
+                  <% }) %>
+            </select>
+               <br>
+              <button class="btn btn-success">Atualizar</button>
+            </form>
+          </div>
+   </div>
+</div>
+
+<div id="content" style="display: none;">
+    <%- article.body%>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="/tinymce/tinymce.min.js"></script>
+<script>
+tinymce.init({
+    language: 'pt_BR',
+    selector:"#article",
+    plugins: [
+        'advlist autolink link image lists print preview hr searchreplace wordcount fullscreen insertdatetime media save table paste emoticons'
+
+    ],
+    init_instance_callback: () =>{ // funcao para colocar o conteudo do artigo no tinimce
+        tinymce.get("article").setContent($("#content").html()) // via jquery chama o conteudo da div content
+    }
+})
+
+
+</script>
+
